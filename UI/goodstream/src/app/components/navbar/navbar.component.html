@@ -1,0 +1,17 @@
+<nav class="navbar navbar-light">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white">Navbar</a>
+
+        <form class="d-flex">
+            <button class="btn btn-outline-danger me-2" type="submit">
+                <a class="nav-link" [routerLink]="['/login']" routerLinkActive="active">Login</a>
+            </button>
+            <button class="btn btn-outline-success" type="submit">
+                <a class="nav-link" [routerLink]="['/register']" routerLinkActive="active">Register</a>
+            </button>
+        </form>
+
+        <h6 *ngIf="user">Welcome {{ user.user.name }}</h6>
+        <button type="button" class="btn btn-danger ms-2 float-end" *ngIf="user" (click)="logout()">Logout</button>
+    </div>
+</nav>

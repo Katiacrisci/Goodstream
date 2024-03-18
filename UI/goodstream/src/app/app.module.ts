@@ -1,42 +1,33 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Routes, RouterModule } from '@angular/router';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { LoginPageComponent } from './components/login-page/login-page.component';
-import { NavComponent } from './components/nav/nav.component';
-import { MainPageComponent } from './components/main-page/main-page.component';
-import { AuthGuard } from './auth/auth.guard';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
+import { FormsModule } from '@angular/forms';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { TokenInterceptor } from './auth/token.interceptor';
-import { RegisterPageComponent } from './components/register-page/register-page.component';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
-const routes: Routes = [
-  { path: 'login-page', component: LoginPageComponent },
-  {
-    path: 'register-page',
-    component: RegisterPageComponent,
-  },
-  { path: '', component: MainPageComponent, canActivate: [AuthGuard] },
-];
 @NgModule({
   declarations: [
     AppComponent,
-    LoginPageComponent,
-    NavComponent,
-    MainPageComponent,
-    RegisterPageComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
-    NgbModule,
-    RouterModule,
-    FormsModule,
-    ReactiveFormsModule,
     HttpClientModule,
-    RouterModule.forRoot(routes),
+    FormsModule,
+    RouterModule,
+    AppRoutingModule,
+    FontAwesomeModule
   ],
   providers: [
     {
@@ -45,6 +36,6 @@ const routes: Routes = [
       multi: true,
     },
   ],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

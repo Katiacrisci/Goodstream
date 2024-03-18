@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthData } from '../module/authdata';
+import { AuthData } from './auth.data';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
-import { BehaviorSubject, throwError, tap, catchError } from 'rxjs';
+import { BehaviorSubject, throwError, tap, catchError } from 'rxjs'; // Il BehaviourSubject è un tipo particolare di Observable che richiede un valore iniziale, emette in tempo reale il cambiamento di valore e si desottoscrive DA SOLO immediatamente dopo - L'operatore tap è utilizzato per manipolare il PRIMO valore emesso da una chiamata HTTP
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
@@ -12,6 +12,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class AuthService {
   jwtHelper = new JwtHelperService();
   apiURL = environment.apiURL;
+
   private authSubj = new BehaviorSubject<null | AuthData>(null);
   user$ = this.authSubj.asObservable();
   utente!: AuthData;
@@ -20,10 +21,12 @@ export class AuthService {
 
   login(data: { email: string; password: string }) {
     return this.http.post<AuthData>(`${this.apiURL}/login`, data).pipe(
-      tap((loggato) => {
-        this.authSubj.next(loggato);
-        this.utente = loggato;
-        localStorage.setItem('user', JSON.stringify(loggato));
+      tap((loginObservable) => {
+        // console.log(loginObservable);
+        this.authSubj.next(loginObservable);
+        this.utente = loginObservable;
+        // console.log(this.utente);
+        localStorage.setItem('user', JSON.stringify(loginObservable));
         console.log(this.user$);
         alert('Login effettuato');
         this.router.navigate(['/']);
@@ -33,38 +36,38 @@ export class AuthService {
   }
 
   restore() {
+    // Utilizzato nel caso in cui l'utente abbandoni l'applicazione senza fare logout; se rientra e il token è ancora valido, non dovrà rifare login
     const user = localStorage.getItem('user');
     if (!user) {
-      this.router.navigate(['/login-page']);
+      this.router.navigate(['/login']);
       return;
     }
     const userData: AuthData = JSON.parse(user);
     if (this.jwtHelper.isTokenExpired(userData.accessToken)) {
-      this.router.navigate(['/login-page']);
+      console.warn("token expired");
+      this.router.navigate(['/login']);
       return;
     }
-    this.authSubj.next(userData);
+    this.authSubj.next(userData); // Rientrando nell'applicazione dopo essere usciti, il BehaviourSubject è di nuovo null: in questo modo riceve i valori presenti nel localStorage e comunica di nuovo a user$ la presenza dell'utente
   }
+
   register(data: {
-    username: string;
-    name: string;
-    surname: string;
+    nome: string;
+    cognome: string;
     email: string;
     password: string;
   }) {
     return this.http.post(`${this.apiURL}/register`, data).pipe(
       tap(() => {
-        this.router.navigate(['/login-page']), catchError(this.errors);
+        this.router.navigate(['/login']), catchError(this.errors);
       })
     );
   }
-  getAllUsers() {
-    return this.http.get<AuthData[]>(`${this.apiURL}/users`);
-  }
+
   logout() {
     this.authSubj.next(null);
     localStorage.removeItem('user');
-    this.router.navigate(['/login-page']);
+    this.router.navigate(['/']);
   }
 
   private errors(err: any) {

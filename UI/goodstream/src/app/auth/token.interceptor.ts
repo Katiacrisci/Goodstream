@@ -6,8 +6,8 @@ import {
   HttpInterceptor,
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { take, switchMap } from 'rxjs';
 import { AuthService } from './auth.service';
+import { take, switchMap } from 'rxjs';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -33,6 +33,8 @@ export class TokenInterceptor implements HttpInterceptor {
           ),
         });
 
+        console.log(request);
+        console.log(this.newReq);
         return next.handle(this.newReq);
       })
     );
