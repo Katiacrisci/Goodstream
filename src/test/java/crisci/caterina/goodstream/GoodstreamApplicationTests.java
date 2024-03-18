@@ -1,0 +1,13 @@
+package crisci.caterina.goodstream;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class GoodstreamApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}

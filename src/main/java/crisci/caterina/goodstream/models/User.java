@@ -22,7 +22,7 @@ import java.util.UUID;
         "password", "credentialsNonExpired", "accountNonExpired",
         "authorities", "username", "accountNonLocked", "enabled"
 })
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
@@ -38,13 +38,43 @@ public class User {
 
     @OneToMany
     private List<Review> reviews;
+
+    public static User fromDTO(UserDTO userDTO) {
+        User user = new User();
+        user.fullName = userDTO.fullName();
+        user.email = userDTO.email();
+        user.password = userDTO.password();
+
+        return user;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return false;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return false;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return false;
+    }
 }
-
-//public static User fromDTO(UserDTO userDTO) {
-////    User user = new User();
-//}
-
-//public Collection<? extends GrantedAuthority> getAuthorities() {
-//    List<SimpleGrantedAuthority> list = this.role.stream().map(element -> new SimpleGrantedAuthority(element.name())).toList();
-// return List;
-//}

@@ -37,7 +37,6 @@ public class AuthService {
         userRepository.findByEmail(user.email()).ifPresent(newUser ->{
             throw new BadRequestException("The email is already in use");
         });
-        String avatar =  "https://ui-avatars.com/api/?name=" + user.fullName();
         User newUser = User.fromDTO(user);
 
         return userRepository.save(newUser);

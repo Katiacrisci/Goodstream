@@ -1,8 +1,10 @@
 package crisci.caterina.goodstream.exceptions;
 
-    public class NotFoundException extends RuntimeException {
-        public NotFoundException(Long id) {
-            super("User with id " + id + " not found");
+import java.util.UUID;
+
+public class NotFoundException extends RuntimeException {
+        public NotFoundException(UUID id) {
+            super("Entity with id " + id + " not found");
         }
 
         public NotFoundException(String message) {
