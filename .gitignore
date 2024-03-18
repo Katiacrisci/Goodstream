@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Angular and node modules ###
+/UI/goodstream/.angular/
+/UI/goodstream/node_modules/
